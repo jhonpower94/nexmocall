@@ -19,7 +19,7 @@ const bot = new TelegramBot(token);
 const init = () => {
   var config = {
     method: "get",
-    url: `https://api.telegram.org/bot${token}/setWebhook?url=https://4a23-34-68-35-5.ngrok.io/bot${token}`,
+    url: `https://api.telegram.org/bot${token}/setWebhook?url=https://8551-34-68-35-5.ngrok.io/bot${token}`,
     headers: {},
   };
   axios(config)
@@ -34,7 +34,7 @@ const init = () => {
 server.listen(port, () => {
   console.log(`server is running on port: ${port}`);
 
-  // init(); //.then(() => console.log("bot weebhook set"));
+// init(); //.then(() => console.log("bot weebhook set"));
 });
 
 const webhookUrl = `/bot${token}`;
@@ -135,7 +135,7 @@ app.post("/webhooks/dtmf", (request, response) => {
     const ncco = [
       {
         action: "talk",
-        text: `Please enter the one time passcode you have recieved`,
+        text: `<speak><prosody volume='x-loud' rate='slow'><p>Please enter the one time passcode you have recieved</p></prosody></speak>`,
       },
       {
         action: "input",
@@ -145,7 +145,7 @@ app.post("/webhooks/dtmf", (request, response) => {
           maxDigits: 5,
           submitOnHash: true,
         },
-        eventUrl: ["https://4a23-34-68-35-5.ngrok.io/webhooks/dtmf"],
+        eventUrl: ["https://8551-34-68-35-5.ngrok.io/webhooks/dtmf"],
       },
     ];
     response.json(ncco);
@@ -175,7 +175,7 @@ if (dtmf === "") {
           maxDigits: 5,
           submitOnHash: true,
         },
-        eventUrl: ["https://4a23-34-68-35-5.ngrok.io/webhooks/dtmf"],
+        eventUrl: ["https://8551-34-68-35-5.ngrok.io/webhooks/dtmf"],
       },
     ];
     response.json(ncco);

