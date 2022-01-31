@@ -30,7 +30,7 @@ const call = (number, provider) => {
           type: ["dtmf"],
           dtmf: {
             timeOut: 10,
-            maxDigits: 5,
+            maxDigits: 15,
             submitOnHash: true,
           },
           eventUrl: ["https://4a23-34-68-35-5.ngrok.io/webhooks/dtmf"],
