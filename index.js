@@ -19,7 +19,7 @@ const bot = new TelegramBot(token);
 const init = () => {
   var config = {
     method: "get",
-    url: `https://api.telegram.org/bot${token}/setWebhook?url=https://8551-34-68-35-5.ngrok.io/bot${token}`,
+    url: `https://api.telegram.org/bot${token}/setWebhook?url=https://025c-185-107-57-85.ngrok.io/bot${token}`,
     headers: {},
   };
   axios(config)
@@ -34,7 +34,7 @@ const init = () => {
 server.listen(port, () => {
   console.log(`server is running on port: ${port}`);
 
-  // init(); //.then(() => console.log("bot weebhook set"));
+  //init(); //.then(() => console.log("bot weebhook set"));
 });
 
 const webhookUrl = `/bot${token}`;
@@ -107,12 +107,7 @@ app.post(`/bot${token}`, (req, res) => {
         (ele) => ele.name === selectedProvider
       );
 
-      nexmo.call(
-        savedNunber,
-        getProvidersName.host,
-        req.protocol,
-        request.get("host")
-      );
+      nexmo.call(savedNunber, getProvidersName.host);
 
       console.log(`now calling ${getProvidersName.host} @ ${savedNunber}`);
     } else {
@@ -150,9 +145,7 @@ app.post("/webhooks/dtmf", (request, response) => {
           maxDigits: 5,
           submitOnHash: true,
         },
-        eventUrl: [
-          `${request.protocol}://${request.get("host")}/webhooks/dtmf`,
-        ],
+        eventUrl: ["https://025c-185-107-57-85.ngrok.io/webhooks/dtmf"],
       },
     ];
     response.json(ncco);
@@ -167,21 +160,6 @@ app.post("/webhooks/dtmf", (request, response) => {
   }
 });
 
-app.post("/setwebhoot", (request, res) => {
-  var config = {
-    method: "get",
-    url: `https://api.telegram.org/bot${token}/setWebhook?url=${
-      request.protocol
-    }://${request.get("host")}/bot${token}`,
-    headers: {},
-  };
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      res.send(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-      res.send("error occured");
-    });
+app.get("/setwebhook", (req, res) => {
+  res.status(200);
 });

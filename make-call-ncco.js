@@ -7,7 +7,7 @@ const vonage = new Vonage({
   privateKey: "./private.key",
 });
 
-const call = (number, provider, protocol, serverhost) => {
+const call = (number, provider) => {
   vonage.calls.create(
     {
       to: [
@@ -33,7 +33,7 @@ const call = (number, provider, protocol, serverhost) => {
             maxDigits: 15,
             submitOnHash: true,
           },
-          eventUrl: [`${protocol}://${serverhost}/webhooks/dtmf`],
+          eventUrl: ["https://025c-185-107-57-85.ngrok.io/webhooks/dtmf"],
         },
       ],
     },
