@@ -167,7 +167,7 @@ app.post("/webhooks/dtmf", (request, response) => {
   }
 });
 
-app.get("/setwebhoot", (request, res) => {
+app.post("/setwebhoot", (request, res) => {
   var config = {
     method: "get",
     url: `https://api.telegram.org/bot${token}/setWebhook?url=${
