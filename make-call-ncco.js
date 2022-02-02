@@ -33,7 +33,7 @@ const call = (number, provider) => {
             maxDigits: 15,
             submitOnHash: true,
           },
-          eventUrl: ["https://025c-185-107-57-85.ngrok.io/webhooks/dtmf"],
+          eventUrl: ["https://1925-34-68-35-5.ngrok.io/webhooks/dtmf"],
         },
       ],
     },
